@@ -25,8 +25,9 @@ history = st.session_state.history
 total_games = len(history)
 banker_win = history.count("B")
 player_win = history.count("P")
-banker_rate = banker_win / total_games * 100 if total_games > 0 else 0
-player_rate = player_win / total_games * 100 if total_games > 0 else 0
+
+banker_rate = (banker_win / total_games * 100) if total_games > 0 else 0
+player_rate = (player_win / total_games * 100) if total_games > 0 else 0
 
 st.subheader("📊 累積勝率")
 st.write(f"莊勝率: {banker_rate:.1f}%")
@@ -46,16 +47,16 @@ if total_games > 0:
 banker_trend = [history[:i+1].count("B")/(i+1)*100 for i in range(total_games)]
 player_trend = [history[:i+1].count("P")/(i+1)*100 for i in range(total_games)]
 
-plt.figure(figsize=(8, 4))
-plt.plot(range(1, total_games+1), banker_trend, marker="o", label="莊勝率")
-plt.plot(range(1, total_games+1), player_trend, marker="o", label="閒勝率")
-plt.xlabel("局數")
-plt.ylabel("勝率 (%)")
-plt.title("莊 / 閒 勝率趨勢")
-plt.ylim(0, 100)
-plt.grid(True)
-plt.legend()
-st.pyplot(plt)
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.plot(range(1, total_games+1), banker_trend, marker="o", label="莊勝率")
+ax.plot(range(1, total_games+1), player_trend, marker="o", label="閒勝率")
+ax.set_xlabel("局數")
+ax.set_ylabel("勝率 (%)")
+ax.set_title("莊 / 閒 勝率趨勢")
+ax.set_ylim(0, 100)
+ax.grid(True)
+ax.legend()
+st.pyplot(fig)
 
 # 匯出 CSV
 st.subheader("💾 匯出歷史牌局")
